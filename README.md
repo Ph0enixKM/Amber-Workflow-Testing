@@ -15,7 +15,7 @@ Programming language that compiles to Bash. It's a high level programming langua
 Amber compiler currently works on:
 - Linux x86 and ARM
 - macOS x86 and ARM (Apple Silicon)
-- Nix (NixOs)
+- Nix (NixOS)
 
 ### macOS / Linux
 Make sure that the operating system meets the following prerequisites
@@ -46,18 +46,17 @@ The package is already containing all the required install scripts and dependenc
 {
     inputs = {
         # ...
-        amber.url = "github:brumik/ytsum";
+        amber.url = "github:Ph0enixKM/Amber";
     };
 
-    # outputs somewhere
-    amber = inputs.amber.defaultPackage."${pkgs.system}";
-
     # then later with home manager for example
-    home.packages = [ amber ];
+    home.packages = [ inputs.amber.packages.${pkgs.system}.default ];
 }
 ```
 
-While developing on Nixos the flake also defines all dependencies for `nix develop` (or `direnv` if used).
+The package is avaiable as `amber-lang` on [nixpkgs](https://github.com/NixOS/nixpkgs/pull/313774).
+
+While developing with Nix, the flake defines all dependencies for `nix develop` (or `direnv` if used).
 
 ### Windows support
 As windows does not come with bash installed it makes no sense to support it. Please install WSL 2 on your windows machine and install Linux version of Amber compiler inside.
