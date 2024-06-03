@@ -1,6 +1,6 @@
 [package]
 name = "amber"
-version = "1.0.0"
+version = "0.3.1-alpha"
 edition = "2021"
 repository = "https://github.com/Ph0enixKM/Amber"
 
@@ -11,6 +11,7 @@ heraclitus-compiler = "1.5.8"
 similar-string = "1.4.2"
 colored = "2.0.0"
 itertools = "0.11.0"
+clap = { version = "4.4.18", features = ["derive"] }
 
 [profile.release]
 debug = true

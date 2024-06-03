@@ -535,6 +535,15 @@ fn array_init() {
 }
 
 #[test]
+fn array_init_with_trailing_comma() {
+    let code = "
+        let a = [1, 2, 3, 4, 5,]
+        echo a
+    ";
+    test_amber!(code, "1 2 3 4 5");
+}
+
+#[test]
 fn array_assign() {
     let code = "
         let a = [1, 2, 3, 4, 5]
@@ -760,6 +769,10 @@ fn test_std_library() {
             loop word in words(\"hello   world ciao     mondo\") {
                 echo word
             }
+            // Split a joined string into a list of string
+            loop word in words(join([\"hello\", \"world\"], \" \")) {
+                echo word
+            }
             // Join a list of strings into a string
             echo join(split(\"hello world\", \"l\"), \"l\")
             // Transform string into a lowercase string
@@ -798,6 +811,8 @@ fn test_std_library() {
         "world",
         "ciao",
         "mondo",
+        "hello",
+        "world",
         "hello world",
         "hello world",
         "HELLO WORLD",
@@ -1120,5 +1135,5 @@ fn variable_ref_function_invocation() {
         unsafe foo(a)
         echo a
     ";
-    test_amber!(code, "sram");
+    test_amber!(code, "\"sram\"");
 }
