@@ -16,6 +16,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Install dependencies
+      run: sudo apt-get install -y cmake
+
+    - name: Set up osxcross
+      run: |
+        git clone https://github.com/tpoechtrager/osxcross.git
+        cd osxcross
+        wget https://github.com/tpoechtrager/osxcross/releases/download/v0.0.2/tarballs.tar.gz
+        tar -xvf tarballs.tar.gz
+        mv ./tarballs/MacOSX10.11.sdk.tar.xz ./tarballs/MacOSX10.11.sdk.tar.bz2
+        UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+
     - name: Set up Rust
       uses: actions-rs/toolchain@v1
       with:
@@ -26,7 +38,12 @@ jobs:
       run: rustup target add ${{ matrix.target }}
 
     - name: Build
-      run: cargo build --release --target ${{ matrix.target }}
+      env:
+        PATH: /home/runner/osxcross/target/bin:$PATH
+      run: |
+        export CC=o64-clang
+        export CXX=o64-clang++
+        cargo build --release --target ${{ matrix.target }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
