@@ -1,0 +1,74 @@
+name: Build and Update Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-update-release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Homebrew
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+
+      - name: Install toolchains
+        run: |
+          brew install messense/macos-cross-toolchains/aarch64-unknown-linux-musl
+          brew install messense/macos-cross-toolchains/x86_64-unknown-linux-gnu
+
+      - name: Add Rust targets
+        run: |
+          rustup target add x86_64-unknown-linux-musl
+          rustup target add aarch64-unknown-linux-musl
+          rustup target add x86_64-apple-darwin
+          rustup target add aarch64-apple-darwin
+
+      - name: Run build script
+        run: cargo run build.ab
+
+      - name: Upload Release Asset Linux Aarch64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: target/release/amber_linux_aarch64
+          asset_name: amber_linux_aarch64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset Linux x86_64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: target/release/amber_linux_x86_64
+          asset_name: amber_linux_x86_64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset MacOS Aarch64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: target/release/amber_macos_aarch64
+          asset_name: amber_macos_aarch64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset MacOS x86_64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: target/release/amber_macos_x86_64
+          asset_name: amber_macos_x86_64
+          asset_content_type: application/octet-stream
