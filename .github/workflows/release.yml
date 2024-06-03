@@ -23,9 +23,9 @@ jobs:
       run: |
         git clone https://github.com/tpoechtrager/osxcross.git
         cd osxcross
-        wget https://github.com/tpoechtrager/osxcross/releases/download/v0.0.2/tarballs.tar.gz
-        tar -xvf tarballs.tar.gz
-        mv ./tarballs/MacOSX10.11.sdk.tar.xz ./tarballs/MacOSX10.11.sdk.tar.bz2
+        wget https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
+        mkdir tarballs
+        mv MacOSX11.3.sdk.tar.xz tarballs/
         UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
 
     - name: Set up Rust
