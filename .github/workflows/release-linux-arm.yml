@@ -2,7 +2,7 @@ name: Release Linux ARM
 
 on:
   release:
-    types: [published]
+    types: [released]
 
 jobs:
   build:
@@ -44,5 +44,5 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: target/aarch64-unknown-linux-gnu/release/amber
-          asset_name: amber-aarch64.zip
+          asset_name: aarch64-unknown-linux-gnu
           asset_content_type: application/octet-stream
