@@ -1,6 +1,6 @@
 [package]
 name = "amber"
-version = "1.0.21"
+version = "1.0.22"
 edition = "2021"
 repository = "https://github.com/Ph0enixKM/Amber"
 
@@ -35,3 +35,5 @@ targets = ["aarch64-apple-darwin", "x86_64-apple-darwin", "x86_64-unknown-linux-
 pr-run-mode = "skip"
 # Whether cargo-dist should create a Github Release or use an existing draft
 create-release = false
+# Allow modifying the release.yml
+allow-dirty = ["ci"]
