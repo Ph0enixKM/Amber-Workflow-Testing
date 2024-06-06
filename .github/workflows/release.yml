@@ -127,9 +127,13 @@ jobs:
           ${{ matrix.packages_install }}
       - name: Install ARM dependencies
         if: ${{ contains(fromJson('["aarch64-unknown-linux-gnu"]'), matrix.targets[0]) }}
-        run: sudo apt-get update && sudo apt-get install -y gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
+        run: |
+          sudo apt-get update && sudo apt-get install -y gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
+          export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
+          export CC=aarch64-linux-gnu-gcc
       - name: Build artifacts
         run: |
+          echo $CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER $CC
           # Actually do builds and make zips and whatnot
           cargo dist build ${{ needs.plan.outputs.tag-flag }} --print=linkage --output-format=json ${{ matrix.dist_args }} > dist-manifest.json
           echo "cargo dist ran successfully"
