@@ -1,9 +1,8 @@
 name: Release Linux ARM
 
 on:
-  push:
-    tags:
-      - '**[0-9]+.[0-9]+.[0-9]+*'
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -28,19 +27,22 @@ jobs:
           name: amber-aarch64-unknown-linux-gnu
           path: target/aarch64-unknown-linux-gnu/release/amber
 
-      - name: Get Release Upload URL
-        id: get_release
-        run: |
-          # Fetch the latest release details
-          response=$(curl -sL https://api.github.com/repos/${{ github.repository }}/releases/latest)
-          # Extract the upload_url template (without the "{?name,label}" suffix)
-          upload_url=$(echo $response | jq -r '.upload_url' | sed -e "s/{?name,label}//")
-          echo "UPLOAD_URL=$upload_url" >> $GITHUB_ENV
+      # - name: Get Release Upload URL
+      #   id: get_release
+      #   run: |
+      #     # Fetch the latest release details
+      #     response=$(curl -sL https://api.github.com/repos/${{ github.repository }}/releases/latest)
+      #     # Extract the upload_url template (without the "{?name,label}" suffix)
+      #     upload_url=$(echo $response | jq -r '.upload_url' | sed -e "s/{?name,label}//")
+      #     echo "UPLOAD_URL=$upload_url" >> $GITHUB_ENV
 
       - name: Upload Release Asset
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ env.UPLOAD_URL }}
+          upload_url: ${{ github.event.release.upload_url }}
           asset_path: target/aarch64-unknown-linux-gnu/release/amber
           asset_name: amber-aarch64.zip
           asset_content_type: application/octet-stream
