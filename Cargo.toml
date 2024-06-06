@@ -1,6 +1,6 @@
 [package]
 name = "amber"
-version = "1.0.25"
+version = "1.0.25-alpha"
 edition = "2021"
 repository = "https://github.com/Ph0enixKM/Amber"
 
