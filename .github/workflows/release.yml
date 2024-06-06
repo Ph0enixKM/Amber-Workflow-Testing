@@ -126,7 +126,7 @@ jobs:
         run: |
           ${{ matrix.packages_install }}
       - name: Install ARM dependencies
-        if: ${{ contains(fromJson('["aarch64-unknown-linux-gnu"]'), matrix.value) }}
+        if: ${{ contains(fromJson('["aarch64-unknown-linux-gnu"]'), matrix.targets) }}
         run: sudo apt-get update && sudo apt-get install -y gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
       - name: Build artifacts
         run: |
