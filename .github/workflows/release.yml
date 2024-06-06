@@ -127,7 +127,7 @@ jobs:
           ${{ matrix.packages_install }}
       - name: Log matrix value
         run: |
-          echo "The current matrix value is: ${{ matrix }}"
+          echo "The current matrix value is: ${{ toJSON(matrix) }}"
       - name: Install ARM dependencies
         if: ${{ contains(fromJson('["aarch64-unknown-linux-gnu"]'), matrix.targets) }}
         run: sudo apt-get update && sudo apt-get install -y gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
