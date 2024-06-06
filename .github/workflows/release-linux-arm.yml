@@ -34,12 +34,19 @@ jobs:
           name: amber-${{ matrix.target }}
           path: target/${{ matrix.target }}/release/amber
 
-      - name: Get Latest Release URL
+      - name: Get Release Upload URL
+        id: get_release
         run: |
-          upload_url=$(curl -sL https://api.github.com/repos/actions/checkout/releases/latest | jq -r '.upload_url')
-          echo UPLOAD_URL=$upload_url >> $GITHUB_ENV
-        shell: bash
+          # Fetch the latest release details
+          response=$(curl -sL https://api.github.com/repos/${{ github.repository }}/releases/latest)
+          # Extract the upload_url template (without the "{?name,label}" suffix)
+          upload_url=$(echo $response | jq -r '.upload_url' | sed -e "s/{?name,label}//")
+          echo "UPLOAD_URL=$upload_url" >> $GITHUB_ENV
 
-      - uses: actions/upload-release-asset@v1
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ env.UPLOAD_URL }}
+          asset_path: target/${{ matrix.target }}/release/amber
+          asset_name: amber-${{ matrix.target }}
+          asset_content_type: application/octet-stream
