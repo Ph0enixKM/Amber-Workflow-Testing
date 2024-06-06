@@ -1,5 +1,8 @@
 name: Release Linux ARM
 
+permissions:
+  contents: write
+
 on:
   release:
     types: [released]
