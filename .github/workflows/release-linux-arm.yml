@@ -24,20 +24,16 @@ jobs:
       - name: Build with cross
         run: cross build --release --target aarch64-unknown-linux-gnu
 
+      - name: Create .tar.xz archive
+        run: |
+          cd target/aarch64-unknown-linux-gnu/release
+          tar -cJf amber-aarch64-unknown-linux-gnu.tar.xz amber
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: amber-aarch64-unknown-linux-gnu
-          path: target/aarch64-unknown-linux-gnu/release/amber
-
-      # - name: Get Release Upload URL
-      #   id: get_release
-      #   run: |
-      #     # Fetch the latest release details
-      #     response=$(curl -sL https://api.github.com/repos/${{ github.repository }}/releases/latest)
-      #     # Extract the upload_url template (without the "{?name,label}" suffix)
-      #     upload_url=$(echo $response | jq -r '.upload_url' | sed -e "s/{?name,label}//")
-      #     echo "UPLOAD_URL=$upload_url" >> $GITHUB_ENV
+          path: target/aarch64-unknown-linux-gnu/release/amber-aarch64-unknown-linux-gnu.tar.xz
 
       - name: Upload Release Asset
         id: upload-release-asset
@@ -46,6 +42,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: target/aarch64-unknown-linux-gnu/release/amber
-          asset_name: aarch64-unknown-linux-gnu
-          asset_content_type: application/octet-stream
+          asset_path: target/aarch64-unknown-linux-gnu/release/amber-aarch64-unknown-linux-gnu.tar.xz
+          asset_name: amber-aarch64-unknown-linux-gnu.tar.xz
+          asset_content_type: application/x-xz
