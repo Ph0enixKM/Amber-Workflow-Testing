@@ -9,12 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        target:
-          - armv7-unknown-linux-gnueabihf
-          - aarch64-unknown-linux-gnu
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -26,13 +20,13 @@ jobs:
         run: cargo install cross
 
       - name: Build with cross
-        run: cross build --release --target ${{ matrix.target }}
+        run: cross build --release --target aarch64-unknown-linux-gnu
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: amber-${{ matrix.target }}
-          path: target/${{ matrix.target }}/release/amber
+          name: amber-aarch64-unknown-linux-gnu
+          path: target/aarch64-unknown-linux-gnu/release/amber
 
       - name: Get Release Upload URL
         id: get_release
@@ -47,6 +41,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: target/${{ matrix.target }}/release/amber
-          asset_name: amber-${{ matrix.target }}
+          asset_path: target/aarch64-unknown-linux-gnu/release/amber
+          asset_name: amber-aarch64-unknown-linux-gnu
           asset_content_type: application/octet-stream
