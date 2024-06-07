@@ -49,4 +49,4 @@ jobs:
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
-            files: amber-aarch64-unknown-linux-gnu.tar.xz
+            files: target/aarch64-unknown-linux-gnu/release/amber-aarch64-unknown-linux-gnu.tar.xz
