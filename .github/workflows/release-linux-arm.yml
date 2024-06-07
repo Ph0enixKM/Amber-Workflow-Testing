@@ -32,16 +32,21 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: amber-aarch64-unknown-linux-gnu
+          name: amber-aarch64-unknown-linux-gnu.tar.xz
           path: target/aarch64-unknown-linux-gnu/release/amber-aarch64-unknown-linux-gnu.tar.xz
 
+      # - name: Upload Release Asset
+      #   id: upload-release-asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ github.event.release.upload_url }}
+      #     asset_path: target/aarch64-unknown-linux-gnu/release/amber-aarch64-unknown-linux-gnu.tar.xz
+      #     asset_name: amber-aarch64-unknown-linux-gnu.tar.xz
+      #     asset_content_type: application/x-xz
+
       - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: target/aarch64-unknown-linux-gnu/release/amber-aarch64-unknown-linux-gnu.tar.xz
-          asset_name: amber-aarch64-unknown-linux-gnu.tar.xz
-          asset_content_type: application/x-xz
+            files: amber-aarch64-unknown-linux-gnu.tar.xz
